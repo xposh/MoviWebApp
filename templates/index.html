@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="user-section">
+    <div class="container">
+        <h1>Users</h1>
+        <div class="user-grid">
+            {% for user in users %}
+            <div class="user-item">
+                <a href="{{ url_for('list_user_movies', user_id=user.id) }}" class="user-card">
+                    <div class="user-avatar">{{ user.name[0] | upper }}</div>
+                    <span class="user-name">{{ user.name }}</span>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="add-user-box" style="background: white; padding: 30px; border-radius: 15px; margin-top: 40px;">
+            <h3>Add a new user</h3>
+            <form action="{{ url_for('add_user') }}" method="post" style="display: flex; gap: 10px;">
+                <input type="text" name="name" placeholder="User Name" required style="flex:1; padding: 12px; border-radius: 6px; border: 1px solid #ddd;">
+                <button type="submit" class="btn-update" style="padding: 12px 25px; background-color: var(--accent); color: white; border: none; border-radius: 6px; cursor: pointer;">Add User</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

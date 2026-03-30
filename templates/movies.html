@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <a href="{{ url_for('home') }}" style="text-decoration: none; color: white; font-weight: bold;">← Back to Users</a>
+
+        <form action="{{ url_for('delete_user', user_id=user.id) }}" method="post" onsubmit="return confirm('Möchtest du diesen User und alle seine Filme wirklich löschen?');">
+            <button type="submit" class="btn-delete-link">Delete this User</button>
+        </form>
+    </div>
+
+    <h1 style="color: white;">Movies for {{ user.name }}</h1>
+
+    <div class="movie-grid">
+        {% for movie in movies %}
+        <div class="movie-card">
+            {% if movie.poster_url and movie.poster_url != 'N/A' %}
+                <img src="{{ movie.poster_url }}" alt="{{ movie.name }}" class="movie-poster">
+            {% else %}
+                <div style="height:400px; background:#eee; display:flex; align-items:center; justify-content:center; border-radius:10px;">No Image</div>
+            {% endif %}
+
+            <form action="{{ url_for('update_movie', user_id=user.id, movie_id=movie.id) }}" method="post" class="update-form">
+                <input type="text" name="new_name" value="{{ movie.name }}" class="update-input">
+                <button type="submit" class="btn-update">Update</button>
+            </form>
+
+            <div class="movie-info" style="margin-bottom: 15px;">
+                <p><strong>Year:</strong> {{ movie.year }}</p>
+                <p><strong>Director:</strong> {{ movie.director }}</p>
+            </div>
+
+            <form action="{{ url_for('delete_movie', user_id=user.id, movie_id=movie.id) }}" method="post">
+                <button type="submit" class="btn-danger">Delete Movie</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+
+    <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.2); margin: 40px 0;">
+
+    <div class="add-movie-section" style="background: white; padding: 30px; border-radius: 15px; margin-top: 40px;">
+        <h3>Add New Movie</h3>
+        <form action="{{ url_for('add_movie', user_id=user.id) }}" method="post" style="display: flex; gap: 10px;">
+            <input type="text" name="title" placeholder="Movie title" required style="flex:2; padding: 10px; border-radius: 6px; border: 1px solid #ddd;">
+            <input type="text" name="year" placeholder="Year (optional)" style="flex:1; padding: 10px; border-radius: 6px; border: 1px solid #ddd;">
+            <button type="submit" style="background-color: var(--accent); color: white; padding: 10px 25px; border: none; border-radius: 6px; cursor: pointer;">Add Movie</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
